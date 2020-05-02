@@ -11,7 +11,7 @@
  * @author     Sarang Shahane <sarangshahane321@gmail.com>
  */
 
-if ( ! class_exists('Ttc_Loader') ) {
+if ( ! class_exists( 'Ttc_Loader' ) ) {
 
 	class Ttc_Loader {
 
@@ -31,7 +31,7 @@ if ( ! class_exists('Ttc_Loader') ) {
 		 */
 		protected $plugin_name = 'Track the Corona';
 
-		
+
 		/**
 		 *  Initiator
 		 */
@@ -85,7 +85,7 @@ if ( ! class_exists('Ttc_Loader') ) {
 			define( 'TTC_VER', '1.0.0' );
 			define( 'TTC_SLUG', 'ttc' );
 		}
-		
+
 		/**
 		 * Activation Reset
 		 */
@@ -114,21 +114,21 @@ if ( ! class_exists('Ttc_Loader') ) {
 			$this->load_core_functions();
 			$this->load_admin_functions();
 			$this->load_public_functions();
-			
+
 		}
 
-		public function load_core_functions(){
+		public function load_core_functions() {
 
 			include_once TTC_DIR . 'includes/class-ttc-i18n.php';
 			include_once TTC_DIR . 'includes/class-ttc-functions.php';
 		}
 
-		public function load_admin_functions(){
+		public function load_admin_functions() {
 
 			include_once TTC_DIR . 'admin/class-ttc-admin.php';
 		}
 
-		public function load_public_functions(){
+		public function load_public_functions() {
 
 			include_once TTC_DIR . 'includes/class-ttc-prepare-data.php';
 		}

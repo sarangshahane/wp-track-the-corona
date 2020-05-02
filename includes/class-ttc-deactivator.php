@@ -34,7 +34,7 @@ class Ttc_Deactivator {
 
 		return self::$instance;
 	}
-	
+
 	/**
 	 * Short Description. (use period)
 	 *

@@ -35,7 +35,7 @@ class Ttc_Activator {
 
 		return self::$instance;
 	}
-		
+
 	/**
 	 * Short Description. (use period)
 	 *

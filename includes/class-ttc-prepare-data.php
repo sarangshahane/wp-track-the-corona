@@ -48,12 +48,12 @@ class Ttc_Prepare_Data {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		
+
 		$this->$request_args = array(
 			'headers' => array(
-				"Accept" => "application/json", 
-				"origin" => site_url()
-			)
+				'Accept' => 'application/json',
+				'origin' => site_url(),
+			),
 		);
 
 		$this->load_dependencies();
@@ -78,15 +78,15 @@ class Ttc_Prepare_Data {
 	}
 
 
-	public function get_national_level_data(){
-	
+	public function get_national_level_data() {
+
 		$body = get_transient( 'ttc_national_lavel_data' );
 
-		if( false === $body ){
-			$response = wp_remote_get('https://api.covid19india.org/data.json', $request_args);
-		
-			$body = json_decode($response['body'], true);
-			set_transient('ttc_national_lavel_data', $body, HOUR_IN_SECONDS);
+		if ( false === $body ) {
+			$response = wp_remote_get( 'https://api.covid19india.org/data.json', $request_args );
+
+			$body = json_decode( $response['body'], true );
+			set_transient( 'ttc_national_lavel_data', $body, HOUR_IN_SECONDS );
 		}
 
 	}

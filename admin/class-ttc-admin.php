@@ -46,8 +46,8 @@ class Ttc_Admin {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @param      string $plugin_name       The name of this plugin.
+	 * @param      string $version    The version of this plugin.
 	 */
 	public function __construct() {
 
@@ -61,7 +61,7 @@ class Ttc_Admin {
 	}
 
 
-	public function register_plugin_menu(){
+	public function register_plugin_menu() {
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -73,7 +73,9 @@ class Ttc_Admin {
 			'manage_options',
 			TTC_SLUG,
 			__CLASS__ . '::print_admin_html',
-			'data:image/svg+xml;base64,' . base64_encode( file_get_contents( TTC_DIR . 'admin/img/track-the-corona.svg' ) ), 40.9 );
+			'data:image/svg+xml;base64,' . base64_encode( file_get_contents( TTC_DIR . 'admin/img/track-the-corona.svg' ) ),
+			40.9
+		);
 	}
 
 	/**
@@ -84,7 +86,7 @@ class Ttc_Admin {
 	 */
 	public static function print_admin_html() {
 
-		$action = ( isset( $_GET['action'] ) ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : ''; 
+		$action = ( isset( $_GET['action'] ) ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 
 		$action = ( ! empty( $action ) && '' != $action ) ? $action : 'general';
 
@@ -97,7 +99,7 @@ class Ttc_Admin {
 	}
 
 
-	public function register_admin_scripts(){
+	public function register_admin_scripts() {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts_and_scripts' ) );
 	}

@@ -26,7 +26,7 @@
 				
 				<div class="ttc-left-menu">
 					<span class="screen-reader-text"><?php __( 'Track the Corona' ); ?></span>
-					<?php echo file_get_contents( TTC_URL . 'admin/img/track-the-corona.svg' );?>
+					<?php echo file_get_contents( TTC_URL . 'admin/img/track-the-corona.svg' ); ?>
 				</div>
 
 				<div class="ttc-right-menu">
