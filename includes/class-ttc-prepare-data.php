@@ -27,7 +27,16 @@
  * @subpackage Ttc/includes
  * @author     Sarang Shahane <sarangshahane321@gmail.com>
  */
-class Ttc {
+class Ttc_Prepare_Data {
+
+	/**
+	 * The URL request header.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      array    $request_args    The array used to store the URL headers.
+	 */
+	protected $request_args = array();
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -40,11 +49,15 @@ class Ttc {
 	 */
 	public function __construct() {
 		
-		$this->load_dependencies();
-		$this->set_locale();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
+		$this->$request_args = array(
+			'headers' => array(
+				"Accept" => "application/json", 
+				"origin" => site_url()
+			)
+		);
 
+		$this->load_dependencies();
+		$this->get_national_level_data();
 	}
 
 	/**
@@ -58,51 +71,24 @@ class Ttc {
 	private function load_dependencies() {
 
 		/**
-		 * The class responsible for defining all actions that occur in the admin area.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-ttc-admin.php';
-
-		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-ttc-public.php';
-
-		$this->loader = new Ttc_Loader();
-
+		// require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-ttc-public.php';
 	}
 
+
+	public function get_national_level_data(){
 	
-	
-	/**
-	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
-	 */
-	public function get_plugin_name() {
-		return $this->plugin_name;
-	}
+		$body = get_transient( 'ttc_national_lavel_data' );
 
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    Ttc_Loader    Orchestrates the hooks of the plugin.
-	 */
-	public function get_loader() {
-		return $this->loader;
-	}
+		if( false === $body ){
+			$response = wp_remote_get('https://api.covid19india.org/data.json', $request_args);
+		
+			$body = json_decode($response['body'], true);
+			set_transient('ttc_national_lavel_data', $body, HOUR_IN_SECONDS);
+		}
 
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
-	 */
-	public function get_version() {
-		return $this->version;
 	}
 
 }

@@ -23,7 +23,7 @@ if ( ! class_exists('Ttc_Loader') ) {
 		private static $instance = null;
 
 		/**
-		 * The unique identifier of this plugin.
+		 * The plugin Name.
 		 *
 		 * @since    1.0.0
 		 * @access   protected
@@ -137,5 +137,5 @@ if ( ! class_exists('Ttc_Loader') ) {
 	/**
 	 *  Execute the functions.
 	 */
-	Cartflows_Loader::get_instance();
+	Ttc_Loader::get_instance();
 }

@@ -23,22 +23,24 @@
 class Ttc_Admin {
 
 	/**
-	 * The ID of this plugin.
+	 * Member Variable
 	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
+	 * @var instance
 	 */
-	private $plugin_name;
+	private static $instance = null;
 
 	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
+	 *  Initiator
 	 */
-	private $version;
+	public static function get_instance() {
+
+		if ( is_null( self::$instance ) ) {
+
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
 
 	/**
 	 * Initialize the class and set its properties.
@@ -47,57 +49,77 @@ class Ttc_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct() {
 
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		if ( ! is_admin() ) {
+			return;
+		}
 
+		add_action( 'admin_menu', array( $this, 'register_plugin_menu' ) );
+
+		add_action( 'admin_init', array( $this, 'register_admin_scripts' ) );
 	}
 
+
+	public function register_plugin_menu(){
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		add_menu_page(
+			'Track the Corona',
+			'Track the Corona',
+			'manage_options',
+			TTC_SLUG,
+			__CLASS__ . '::print_admin_html',
+			'data:image/svg+xml;base64,' . base64_encode( file_get_contents( TTC_DIR . 'admin/img/track-the-corona.svg' ) ), 40.9 );
+	}
+
+	/**
+	 * Renders the admin settings.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public static function print_admin_html() {
+
+		$action = ( isset( $_GET['action'] ) ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : ''; 
+
+		$action = ( ! empty( $action ) && '' != $action ) ? $action : 'general';
+
+		$action = str_replace( '_', '-', $action );
+
+		// Enable header icon filter below.
+		$header_wrapper_class = apply_filters( 'ttc_header_wrapper_class', array( $action ) );
+
+		include_once TTC_DIR . 'admin/partials/ttc-admin-display.php';
+	}
+
+
+	public function register_admin_scripts(){
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts_and_scripts' ) );
+	}
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_scripts_and_scripts() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Ttc_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Ttc_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		// Load Styles.
+		wp_enqueue_style( 'ttc-admin-scripts', TTC_URL . 'admin/css/ttc-admin.css', array(), TTC_VER );
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/ttc-admin.css', array(), $this->version, 'all' );
+		wp_style_add_data( 'ttc-admin-scripts', 'rtl', 'replace' );
 
-	}
-
-	/**
-	 * Register the JavaScript for the admin area.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Ttc_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Ttc_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/ttc-admin.js', array( 'jquery' ), $this->version, false );
-
+		// Load Script.
 	}
 
 }
+
+/**
+*
+* Initilize the class.
+*/
+Ttc_Admin::get_instance();
